@@ -1,62 +1,78 @@
 package mx.fca.aviones;
 
 import android.util.Log;
-
 import java.util.ArrayList;
 
 public class Plano {
 
     public ArrayList<Avion> aviones;
-
     public ArrayList<Colision> colisiones;
-
     public int col;
-
     public int row;
-
     public int noPaso;
 
-    // Constructor
     Plano(int noPaso, ArrayList<Avion> aviones, ArrayList<Colision> colisiones) {
-
         this.noPaso = noPaso;
         this.aviones = aviones;
         this.colisiones = colisiones;
 
         int tmpX = 0;
         int tmpY = 0;
-        for (Avion avion: aviones) {
-            if (avion.x > tmpX) {
-                tmpX = avion.x;
-            }
-            if (avion.y > tmpX) {
-                tmpY = avion.y;
+        if (aviones != null) {
+            for (Avion avion: aviones) {
+                if (avion.x > tmpX) {
+                    tmpX = avion.x;
+                }
+                if (avion.y > tmpY) {
+                    tmpY = avion.y;
+                }
             }
         }
         col = tmpX;
         row = tmpY;
+    }
 
-        Log.i("Aviones max de columna", String.valueOf(col));
-        Log.i("Aviones max de renglon", String.valueOf(row));
+    public Plano(Plano otroPlano) {
+        this.noPaso = otroPlano.noPaso;
+        this.col = otroPlano.col;
+        this.row = otroPlano.row;
+
+        this.aviones = new ArrayList<>();
+        if (otroPlano.aviones != null) {
+            for (Avion avion : otroPlano.aviones) {
+                this.aviones.add(new Avion(avion));
+            }
+        }
+
+        this.colisiones = new ArrayList<>();
+        if (otroPlano.colisiones != null) {
+            for (Colision colision : otroPlano.colisiones) {
+                this.colisiones.add(new Colision(colision));
+            }
+        }
     }
 
     public Plano next() {
-        Log.i("Cristian", String.valueOf(noPaso));
-        noPaso += 1;
-        return Analizador.next(noPaso, this);
+        Log.i("Plano.next()", "Calculando el siguiente paso desde el paso: " + this.noPaso);
+        return Analizador.next(this.noPaso + 1, new Plano(this));
     }
 
-    public Plano prev() {
-        // Tu vas a implementar
-        noPaso -= 1;
-        return null;
+    public int getNumeroPaso() {
+        return this.noPaso;
     }
 
     public int getNumeroColisiones() {
-        return colisiones.toArray().length;
+        if (colisiones == null) {
+            return 0;
+        }
+        return colisiones.size();
     }
 
     public int getNumeroAviones() {
-        return aviones.toArray().length;
+        if (aviones == null) {
+            return 0;
+        }
+        return aviones.size();
     }
 }
+

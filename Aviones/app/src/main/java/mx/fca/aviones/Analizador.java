@@ -13,45 +13,53 @@ public class Analizador {
     }
 
     public static Plano next(int noPaso, Plano plano){
-        // Implementa usted
         if (memoria.containsKey(noPaso)){
             return memoria.get(noPaso);
         } else {
-            Plano planoNuevo;
+            Plano planoAnterior = memoria.get(noPaso - 1);
+            if (planoAnterior == null) {
+                return null;
+            }
             ArrayList<Avion> nuevosAviones = new ArrayList<>();
 
-            // Calcular colision
-            /// Aqui
-            ArrayList<Colision> colisiones = new ArrayList<>();
+            for (Avion avion : planoAnterior.aviones) {
+                Avion nuevoAvion = new Avion(avion);
 
-            // Cuantas colisiones hay en este plano ?
-
-            ///// AQUIIIIII SE HACE EL CALCULO DE LAS COLISION
-
-
-            // Esta calculando la sig. iteracion
-            // (0,0,>), (2,0,<) NO PASO = 0
-            // NO PASO = 1 + 1 COLISION EN DONDE? ((1,0,>), (1,0,<) )
-
-            for (Avion avion: plano.aviones) {
-                // Calcular movimiento
-                switch (avion.direccion){
-                    case NORTH:
-                        avion.y = avion.y - 1;
+                switch (nuevoAvion.direccion){
+                    case NORTE:
+                        nuevoAvion.y = nuevoAvion.y - 1;
                         break;
-                    case SOUTH:
-                        avion.y = avion.y + 1;
+                    case SUR:
+                        nuevoAvion.y = nuevoAvion.y + 1;
                         break;
-                    case EAST:
-                        avion.x = avion.x + 1;
+                    case ESTE:
+                        nuevoAvion.x = nuevoAvion.x + 1;
                         break;
-                    case WEST:
-                        avion.x = avion.x - 1;
+                    case OESTE:
+                        nuevoAvion.x = nuevoAvion.x - 1;
                         break;
                 }
-                nuevosAviones.add(avion);
+                nuevosAviones.add(nuevoAvion);
             }
-            planoNuevo = new Plano(noPaso, nuevosAviones, colisiones);
+
+            ArrayList<Colision> colisiones = new ArrayList<>();
+            HashMap<String, ArrayList<Avion>> posiciones = new HashMap<>();
+
+            for (Avion avion : nuevosAviones) {
+                String key = avion.x + "," + avion.y;
+                if (!posiciones.containsKey(key)) {
+                    posiciones.put(key, new ArrayList<>());
+                }
+                posiciones.get(key).add(avion);
+            }
+
+            for (ArrayList<Avion> avionesEnMismaPosicion : posiciones.values()) {
+                if (avionesEnMismaPosicion.size() > 1) {
+                    colisiones.add(new Colision(avionesEnMismaPosicion));
+                }
+            }
+
+            Plano planoNuevo = new Plano(noPaso, nuevosAviones, colisiones);
             memoria.put(noPaso, planoNuevo);
             return planoNuevo;
         }

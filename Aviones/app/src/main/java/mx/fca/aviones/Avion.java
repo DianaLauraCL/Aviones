@@ -1,27 +1,32 @@
+// En: mx/fca/aviones/Avion.java
 package mx.fca.aviones;
 
 public class Avion {
-    Direccion direccion;
-    int x;
-    int y;
 
-    public Avion(Direccion direccion, int x, int y) {
-        this.direccion = direccion;
-        this.x = x;
-        this.y = y;
+    public int id;    public int x;
+    public int y;
+    public Direccion direccion;
+    public boolean esVisible;
+    public enum Direccion {
+        NORTE,
+        SUR,
+        ESTE,
+        OESTE
     }
 
-    public int getImage() {
-        switch (direccion){
-            case NORTH:
-                return R.mipmap.north;
-            case SOUTH:
-                return R.mipmap.south;
-            case EAST:
-                return R.mipmap.east;
-            case WEST:
-                return R.mipmap.west;
-        }
-        return R.mipmap.north;
+    public Avion(int id, int x, int y, Direccion direccion) {
+        this.id = id;
+        this.x = x;
+        this.y = y;
+        this.direccion = direccion;
+        this.esVisible = true;
+    }
+
+    public Avion(Avion otroAvion) {
+        this.id = otroAvion.id;
+        this.x = otroAvion.x;
+        this.y = otroAvion.y;
+        this.direccion = otroAvion.direccion;
+        this.esVisible = otroAvion.esVisible;
     }
 }
