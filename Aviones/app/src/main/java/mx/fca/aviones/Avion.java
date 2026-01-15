@@ -1,4 +1,3 @@
-// En: mx/fca/aviones/Avion.java
 package mx.fca.aviones;
 
 public class Avion {

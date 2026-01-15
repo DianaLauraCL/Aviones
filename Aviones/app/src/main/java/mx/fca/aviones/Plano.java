@@ -3,7 +3,7 @@ package mx.fca.aviones;
 import android.util.Log;
 import java.util.ArrayList;
 
-public class Plano {
+public class    Plano {
 
     public ArrayList<Avion> aviones;
     public ArrayList<Colision> colisiones;

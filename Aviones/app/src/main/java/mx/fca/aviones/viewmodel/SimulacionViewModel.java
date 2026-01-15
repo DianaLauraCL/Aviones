@@ -16,7 +16,7 @@ public class SimulacionViewModel extends ViewModel {
     private final androidx.lifecycle.MutableLiveData<Plano> planoActual = new androidx.lifecycle.MutableLiveData<>();
 
     public SimulacionViewModel() {
-        // Estado inicial
+
         Plano planoInicial = Planificador.crearRutaInicial();
         historialDePasos.add(planoInicial);
         indicePasoActual = 0;
